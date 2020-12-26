@@ -254,7 +254,6 @@ Data Algorithms:: getData ()
 }
 
 
-
 void Algorithms:: Diikstra (std::string start, std:: string finish)
 {
     if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
@@ -264,62 +263,46 @@ void Algorithms:: Diikstra (std::string start, std:: string finish)
         return ;
     }
     std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
-    std::unordered_map<std::string,  bool> visited;
-    std::unordered_map<std::string, int> currentDistance;
-    std::queue<std::string> q;
-    std::pair<std::string, int> minForQueue;
-    for (auto const& i: map)
+    std::unordered_map<std::string, int> Q;
+    for(auto const& i: map)
     {
-        visited.insert(std::make_pair(i.first, false));
-        currentDistance.insert(std::make_pair(i.first, INF));
+        Q.insert(std::make_pair(i.first, INF));
     }
-    currentDistance[start]=0;
-    q.push(start);
-    visited[start]=true;
-    while (!q.empty())
+    Q[start]=0; 
+    std::string currentVertex;
+    while (!Q.empty())
     {
-        std::string node=q.front();
-        q.pop();
-        int distance=currentDistance[node];
-        for (auto const& i: map[node])
+        int min=INF;
+        for(auto const& i: Q)
         {
-            int possibleNewDistance= distance+ i.second;
-            if(possibleNewDistance<currentDistance[i.first] && !visited[i.first])
+            if(i.second<=min)
             {
-                currentDistance[i.first]=possibleNewDistance;
-            } 
-        }
-
-        int currMin=INF;
-        std::string currName;
-        for(auto const& i: map[node])
-        {
-            if(i.second<currMin && !visited[i.first])
-            {
-                currName=i.first;
-                currMin=i.second;
+                min=i.second;
+                currentVertex=i.first;
             }
         }
-        if(currName==finish)
+        int distance = Q[currentVertex];
+        Q.erase(currentVertex);
+        if(currentVertex==finish)
         {
-            for(auto const& i: map[node])
+            if(distance!=INF)
             {
-                if(i.first==currName)
-                {
-                    std::cout<<currentDistance[node]+ i.second;
-                    std::cout<<'\n';
+                std::cout<<distance<<'\n';
+                return;
+            }
+        }
+        for (auto const& i: map[currentVertex])
+        {
+            if (Q.find(i.first)!=Q.end())
+            {
+                int possibleNewDistance= distance+ i.second;
+                if (possibleNewDistance<Q[i.first])
+                {   
+                    Q[i.first]=possibleNewDistance;
                 }
-            }
-            return;
-        }
-        if(!visited[currName])
-        {
-            q.push(currName);
-            visited[currName]=true;
+            }   
         }
     }
+    std::cout<<"You cannot reach crossroad 2 from crossroad 1\n";
 }
-
-
-
 
