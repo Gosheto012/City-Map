@@ -317,7 +317,6 @@ void Algorithms:: Diikstra (std::string start, std:: string finish)
             q.push(currName);
             visited[currName]=true;
         }
-       // std::cout<<currentDistance["Tati"]<<'\n';
     }
 }
 
