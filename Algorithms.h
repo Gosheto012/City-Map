@@ -21,7 +21,7 @@ class Algorithms
 
     bool canReachAllOthers (std::string start); // 6
 
-   // void Diijstra (std::string start, std::string finish); 
+  
     bool stringsBelongInArray (std::string str, std::vector<std::string> strArray);
 
     bool isNoWayCrossroad (std::string start);//
@@ -36,7 +36,5 @@ class Algorithms
     void Diikstra (std::string start, std:: string finish);
     Data getData ();
 };
-//za dali e svurzan broim dali broqchut stiga raven do broq na dvoikite 
-//moje i nqkva rekursiq->return broinaspisuk 
 
 #endif
