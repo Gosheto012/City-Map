@@ -253,7 +253,6 @@ Data Algorithms:: getData ()
     return loadedGraph;
 }
 
-
 void Algorithms:: Diikstra (std::string start, std:: string finish)
 {
     if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
@@ -264,12 +263,14 @@ void Algorithms:: Diikstra (std::string start, std:: string finish)
     }
     std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string, int> Q;
+    std::map<std::string, std::string> previous;
     for(auto const& i: map)
     {
         Q.insert(std::make_pair(i.first, INF));
     }
     Q[start]=0; 
     std::string currentVertex;
+    std::list<std::string> finalNodeSequence;
     while (!Q.empty())
     {
         int min=INF;
@@ -287,6 +288,16 @@ void Algorithms:: Diikstra (std::string start, std:: string finish)
         {
             if(distance!=INF)
             {
+                std::string elementToAdd=finish;
+                while(elementToAdd!="")
+                {
+                    finalNodeSequence.push_front(elementToAdd);
+                    elementToAdd=previous[elementToAdd];
+                }
+                for(std::list<std::string>::iterator i=finalNodeSequence.begin(); i != finalNodeSequence.end(); ++i)
+                {
+                    std::cout<<*i<<" -> "; 
+                }
                 std::cout<<distance<<'\n';
                 return;
             }
@@ -299,10 +310,77 @@ void Algorithms:: Diikstra (std::string start, std:: string finish)
                 if (possibleNewDistance<Q[i.first])
                 {   
                     Q[i.first]=possibleNewDistance;
+                    previous[i.first]=currentVertex;
+                    if(currentVertex==start) previous[currentVertex]="";
                 }
-            }   
+            }  
         }
     }
     std::cout<<"You cannot reach crossroad 2 from crossroad 1\n";
 }
 
+
+std::pair<std::list<std::string>, int> Algorithms:: DiikstraReturn (std::string start, std:: string finish)
+{
+    std::pair<std::list<std::string>, int> result;
+    if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
+    {
+        std::cout<<"There is an invalid name among the written above";
+        std::cout<<'\n';
+        return result ;
+    }
+    std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
+    std::unordered_map<std::string, int> Q;
+    std::map<std::string, std::string> previous;
+    for(auto const& i: map)
+    {
+        Q.insert(std::make_pair(i.first, INF));
+    }
+    Q[start]=0; 
+    std::string currentVertex;
+    std::list<std::string> finalNodeSequence;
+    while (!Q.empty())
+    {
+        int min=INF;
+        for(auto const& i: Q)
+        {
+            if(i.second<=min)
+            {
+                min=i.second;
+                currentVertex=i.first;
+            }
+        }
+        int distance = Q[currentVertex];
+        Q.erase(currentVertex);
+        if(currentVertex==finish)
+        {
+            if(distance!=INF)
+            {
+                std::string elementToAdd=finish;
+                while(elementToAdd!="")
+                {
+                    finalNodeSequence.push_front(elementToAdd);
+                    elementToAdd=previous[elementToAdd];
+                }
+                result.first=finalNodeSequence;
+                result.second=distance;
+                return result;
+            }
+        }
+        for (auto const& i: map[currentVertex])
+        {
+            if (Q.find(i.first)!=Q.end())
+            {
+                int possibleNewDistance= distance+ i.second;
+                if (possibleNewDistance<Q[i.first])
+                {   
+                    Q[i.first]=possibleNewDistance;
+                    previous[i.first]=currentVertex;
+                    if(currentVertex==start) previous[currentVertex]="";
+                }
+            }  
+        }
+    }
+    std::cout<<"You cannot reach crossroad 2 from crossroad 1\n";
+    return result;
+}
