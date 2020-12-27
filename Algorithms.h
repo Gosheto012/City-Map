@@ -34,6 +34,7 @@ class Algorithms
     void printEulerianPathIfAvailable (); //5 Hierholzer's algorithm 
 
     void Diikstra (std::string start, std:: string finish);
+    std::pair<std::list<std::string>, int> DiikstraReturn (std::string start, std:: string finish);
     Data getData ();
 };
 
