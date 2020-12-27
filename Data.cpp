@@ -6,7 +6,7 @@ Data:: Data ()
 }
 
 
-int Data:: numberVertexesInLine (std::string line) // including the vertex
+int Data:: numberVertexesInLine (std::string line) 
 {
     int currentWordNumber=0;
     for(int i=0;i<=line.length();i++)
@@ -20,13 +20,13 @@ int Data:: numberVertexesInLine (std::string line) // including the vertex
 }
 
 
-std::string Data:: extractNameGraph(std::string line, int wordNumber) // mai zapochva broene ot 1
+std::string Data:: extractNameGraph(std::string line, int wordNumber) 
 {
     std::string tempString;
     int currentWordNumber=0;
     for(size_t i=0;i<line.length();i++)
     {
-        if(line[i]==' ' || i==line.length()-1) // da go vidq utre
+        if(line[i]==' ' || i==line.length()-1) 
         {
             if(i==line.length()-1) tempString+=line[i];
             currentWordNumber++;
@@ -45,7 +45,7 @@ std::string Data:: extractNameGraph(std::string line, int wordNumber) // mai zap
 }
 
 
-std::list<std::pair<std::string, int>> Data:: makeListFromLine (std::string line)//sh proam posle da ne vikamm gornata funkciq za po malka slojnost
+std::list<std::pair<std::string, int>> Data:: makeListFromLine (std::string line)
 {
     std::list<std::pair<std::string, int>> result;
     int counter=1;
@@ -65,7 +65,7 @@ std::list<std::pair<std::string, int>> Data:: makeListFromLine (std::string line
 }
 
 
-void Data:: loadDataFromFile (const char *fileName) // proverka da napraq dali ima dr rebra
+void Data:: loadDataFromFile (const char *fileName) 
 {
     std:: ifstream file;
     std::string line;
