@@ -2,32 +2,26 @@
 
 Graph:: Graph ()
 {
-    numberOfEdges=0;
-    numberOfVerices=0;
     myGraph.clear();
 }
 
 
 Graph:: Graph (const Graph& other)
 {
-    numberOfVerices=other.numberOfVerices;
-    numberOfEdges=other.numberOfEdges;
     myGraph=other.myGraph;
 }
+
 
 Graph::  Graph (std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > otherMap, int otherVertices, int otherEdges)
 {
     myGraph=otherMap;
-    numberOfVerices=otherVertices;
-    numberOfEdges=otherEdges;
 }
+
 
 Graph& Graph:: operator= (const Graph& other)
 {
     if(this!=&other)
     {
-        numberOfVerices=other.numberOfVerices;
-        numberOfEdges=other.numberOfEdges;
         myGraph=other.myGraph;
     }
     return *this;
@@ -60,26 +54,53 @@ void Graph:: addEdge(const std::string& firstVertex, const std::string& secondVe
     if(!pathAdjuscent (firstVertex, secondVertex))
     {
         myGraph[firstVertex].push_back(std::make_pair(secondVertex, distance));
-        ++numberOfEdges;
-    }
-    else
-    {
-        //std::cout<<"There already exists a path between these vertices";
     }
 }
+
 
 void Graph:: addVertex (std::string newName, std::list<std:: pair<std::string, int>> l)
 {
     if(!existsVertex(newName))
     {
         myGraph.insert(std::make_pair(newName, l));
-        ++numberOfVerices;
+    }
+}
+
+
+void Graph:: removeEdge (const std::string& firstVertex, const std::string& secondVertex)
+{
+    if(!existsVertex(firstVertex) || !existsVertex(secondVertex))
+    {
+        return;
+    }
+    if(!pathAdjuscent (firstVertex, secondVertex))
+    {
+        return;
     }
     else
     {
-        // std::cout<<"There already exists such a vertex";
-    }
+        for(std::list<std::pair<std::string, int>>::iterator i=myGraph[firstVertex].begin(); i!=myGraph[firstVertex].end(); i++)
+        {
+            std::pair<std::string, int> p=*i;
+            if(p.first==secondVertex)
+            {
+                myGraph[firstVertex].erase(i);
+                return;
+            }
+        }
+    }    
 }
+
+
+void Graph:: removeVertex (const std::string& vertexName)
+{
+    if(!existsVertex(vertexName))
+    {
+        return;
+    }
+    myGraph.erase(vertexName);
+}
+
 
 void Graph:: print () const
 {
@@ -97,6 +118,20 @@ void Graph:: print () const
 		std::cout << std::endl;
 	}
 }
+
+
+int Graph:: getDistanceConnectedNodes (const std::string& firstVertex, const std::string& secondVertex)
+{
+    if(!pathAdjuscent (firstVertex, secondVertex))
+    {
+        return 0;
+    }
+    for (auto const& i: myGraph[firstVertex])
+    {
+        if (i.first==secondVertex) return i.second;
+    }
+}
+
 
 std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > Graph:: getMyGraph()
 {
