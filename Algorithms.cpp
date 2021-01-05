@@ -1,13 +1,20 @@
 #include"Algorithms.h"
-#define INF 0x3f3f3f3f
+#define INF  std::numeric_limits<int>::max()
 
-Algorithms:: Algorithms (std::string b)
+
+void Algorithms:: loadData (std::string file)
 {
-    loadedGraph.loadDataFromFile(b.c_str());
+    loadedGraph.loadDataFromFile(file.c_str());
 }
 
 
-bool Algorithms:: stringsBelongInArray (std::string str, std::vector<std::string> strArray) // moje da probvam s list
+bool Algorithms:: existsVertex (std::string vertexName)
+{
+    return loadedGraph.getGraph().existsVertex(vertexName);
+}
+
+
+bool Algorithms:: stringsBelongInArray (std::string str, std::vector<std::string> strArray)
 {
     for(size_t i=0; i<strArray.size(); ++i)
     {
@@ -123,7 +130,7 @@ bool Algorithms:: isNoWayCrossroad (std::string start)
 void Algorithms:: printOneWayStreets ()
 {
     std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
-    std::cout<<"All one-way streets are\n";
+    std::cout<<"All one-way streets are:\n";
     for(auto const& i: map)
     {
         std::string Node = i.first;
@@ -174,8 +181,8 @@ void Algorithms:: traverse (std::string name, std:: unordered_map< std::string, 
 }
 
 
- bool Algorithms:: isConnected ()
- {
+bool Algorithms:: isConnected ()
+{
     std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string, bool> m;
     for (auto const& i: map)
@@ -196,7 +203,8 @@ void Algorithms:: traverse (std::string name, std:: unordered_map< std::string, 
         }
     }
     return true;
- }
+}
+
 
 void Algorithms:: printEulerianPathIfAvailable ()
 {
@@ -205,6 +213,7 @@ void Algorithms:: printEulerianPathIfAvailable ()
         std::cout<<"You cannot cross all the streets without repeating\n";
         return;
     }
+    std::cout<<"An example of a city tour is the following route:\n";
     std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string,int> edge_count; 
   
@@ -248,10 +257,6 @@ void Algorithms:: printEulerianPathIfAvailable ()
     } 
 }
 
-Data Algorithms:: getData ()
-{
-    return loadedGraph;
-}
 
 void Algorithms:: Diikstra (std::string start, std:: string finish)
 {
@@ -320,16 +325,15 @@ void Algorithms:: Diikstra (std::string start, std:: string finish)
 }
 
 
-std::pair<std::list<std::string>, int> Algorithms:: DiikstraReturn (std::string start, std:: string finish)
+std::pair<std::vector<std::string>, int> Algorithms:: DiikstraReturn (std::string start, std:: string finish, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map)
 {
-    std::pair<std::list<std::string>, int> result;
+    std::pair<std::vector<std::string>, int> result;
     if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
     {
         std::cout<<"There is an invalid name among the written above";
         std::cout<<'\n';
         return result ;
     }
-    std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string, int> Q;
     std::map<std::string, std::string> previous;
     for(auto const& i: map)
@@ -338,7 +342,7 @@ std::pair<std::list<std::string>, int> Algorithms:: DiikstraReturn (std::string 
     }
     Q[start]=0; 
     std::string currentVertex;
-    std::list<std::string> finalNodeSequence;
+    std::vector<std::string> finalNodeSequence;
     while (!Q.empty())
     {
         int min=INF;
@@ -359,7 +363,7 @@ std::pair<std::list<std::string>, int> Algorithms:: DiikstraReturn (std::string 
                 std::string elementToAdd=finish;
                 while(elementToAdd!="")
                 {
-                    finalNodeSequence.push_front(elementToAdd);
+                    finalNodeSequence.insert(finalNodeSequence.begin(),elementToAdd);
                     elementToAdd=previous[elementToAdd];
                 }
                 result.first=finalNodeSequence;
@@ -381,6 +385,238 @@ std::pair<std::list<std::string>, int> Algorithms:: DiikstraReturn (std::string 
             }  
         }
     }
-    std::cout<<"You cannot reach crossroad 2 from crossroad 1\n";
     return result;
+}
+
+
+std::pair<std::vector<std::string>, int> Algorithms:: addCostToListandReturnShortest (std::list<std::pair<std::vector<std::string>, int>> B, Graph graph)
+{
+    int crrMin=INF;
+    std::pair<std::vector<std::string>, int> result;
+    for(std::list<std::pair<std::vector<std::string>, int>>::iterator it=B.begin(); it!=B.end(); it++)
+    {
+        std::pair<std::vector<std::string>, int> myPair=*it;
+        for(int i=0; i<myPair.first.size()-1; i++)
+        {
+            myPair.second+=graph.getDistanceConnectedNodes(myPair.first[i], myPair.first[i+1]);
+        }
+
+        if(crrMin>myPair.second)
+        {
+            result=myPair;
+            crrMin=myPair.second;
+        } 
+    }
+    return result;
+}
+
+
+std::list<std::pair<std::string, int>> Algorithms:: returnListVertex (std::string vertexName, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map)
+{
+    return map[vertexName];
+}
+
+
+std::vector<std::pair<std::vector<std::string>, int> > Algorithms:: threeShortestPathsHelper (std::string start, std::string finish, Graph graph)
+{
+    std::vector<std::pair<std::vector<std::string>, int> > A;
+    std::list<std::pair<std::vector<std::string>, int>> B;
+    A.push_back(DiikstraReturn(start, finish, graph.getMyGraph()));
+    bool flag=false;
+    bool flag2=true;
+    for(int k=1; k<=2; k++)
+    {
+        flag=false;
+        for(int i=0; i<=A[k-1].first.size()-2; i++)
+        {
+            flag=false;
+            std::string spurNode=A[k-1].first[i];
+            std::vector<std::string> rootPath;
+            std::unordered_map<std::string, std::list<std::pair<std::string, int>>> vertexSave;
+            std::list<std::pair<std::string, std::pair<std::string, int>>> newEdgesSave;
+            for(int s=0; s<=i; s++) rootPath.push_back(A[k-1].first[s]);
+            for(int p=0; p<A.size(); p++)
+            {
+                std::vector<std::string> pNodes;
+                int min=A[p].first.size()-1;
+                if(min>i) min=i;
+                for(int s=0; s<=min; s++)
+                {
+                    pNodes.push_back(A[p].first[s]);
+                }
+                if(pNodes==rootPath)
+                {
+                    std::string vertex1= A[p].first[i];
+                    std::string vertex2=A[p].first[i+1];
+                    int distance=graph.getDistanceConnectedNodes(vertex1, vertex2);
+                    std::pair<std::string, int> pair2=std::make_pair(vertex2, distance);
+                    std::pair<std::string, std::pair<std::string, int>> mainPair= std::make_pair(vertex1, pair2);
+                    newEdgesSave.push_back(mainPair);
+                    if(graph.existsVertex(vertex1) && graph.existsVertex(vertex2))graph.removeEdge(vertex1, vertex2);
+                }
+            }
+ 
+            
+            for (int s=0; s<rootPath.size(); s++)
+            {
+                if(rootPath[s]!=spurNode)
+                {
+                    vertexSave.insert(std::make_pair(rootPath[s], returnListVertex(rootPath[s], graph.getMyGraph())));
+                    if(graph.existsVertex(rootPath[s]))graph.removeVertex(rootPath[s]);
+                } 
+            }
+            std::vector<std::string> spurPath =DiikstraReturn(spurNode, finish, graph.getMyGraph()).first;
+            std::vector<std::string> totalPath;
+            for(int s=0; s<rootPath.size(); s++)
+            {
+                totalPath.push_back(rootPath[s]);
+            }
+            for(int s=1; s<spurPath.size(); s++)
+            {
+                totalPath.push_back(spurPath[s]);
+            }
+            bool destinationFlag=false;
+            if(totalPath[totalPath.size()-1]!=finish) destinationFlag=true;
+            for(std::list<std::pair<std::vector<std::string>, int>>::iterator it=B.begin(); it!=B.end(); it++)
+            {
+                std::pair<std::vector<std::string>, int> myPair=*it;
+                if(totalPath==myPair.first)
+                {
+
+                    flag=true;
+                    break;
+                } 
+            }
+            if(!flag && !destinationFlag)
+            {
+                B.push_back(std::make_pair(totalPath, 0));
+            }
+
+            for(auto const& q: newEdgesSave)
+            {
+                graph.addEdge(q.first, q.second.first, q.second.second);
+            }
+
+
+            for(auto const& q: vertexSave)
+            {
+                graph.addVertex(q.first, q.second);
+            }
+
+            vertexSave.clear();
+            newEdgesSave.clear();
+        }
+        if(B.empty()) break;
+        A.push_back(addCostToListandReturnShortest(B, graph));
+        for(std::list<std::pair<std::vector<std::string>, int>>::iterator it=B.begin(); it!=B.end(); it++)
+        {
+            std::pair<std::vector<std::string>, int> myPair=*it;
+            if(myPair.first==A[k].first)
+            {
+                B.erase(it);
+                break;
+            }
+        }
+    }
+    return A;
+}
+
+
+void Algorithms:: printThreeShortestPaths (std::vector<std::pair<std::vector<std::string>, int> >& A)
+{
+    if(A.size()==0)
+    {
+        std::cout<<"There is no path betweeen these crossroads";
+        return;
+    }
+    else if(A.size()==1)
+    {
+        std::cout<<"There is only one path between these crossroads and it is:\n";
+        for(int i=0; i<A[0].first.size(); i++)
+        {
+            std::cout<<A[0].first[i]<<" -> ";
+        }
+        std::cout<<A[0].second<<'\n';
+        return;
+    }
+    else if (A.size()==2)
+    {
+        std::cout<<"There are only two paths between these crossroads and they are:\n";
+        for(int i=0; i<A.size(); i++)
+        {
+            for(int j=0; j<A[i].first.size(); j++)
+            {
+                std::cout<<A[i].first[j]<<" -> ";
+            }
+            std::cout<<A[i].second<<'\n';
+        }
+        return;
+    }
+    else
+    {
+        std::cout<<"The three shortest paths between these crossroads are:\n";
+        for(int i=0; i<A.size(); i++)
+        {
+            for(int j=0; j<A[i].first.size(); j++)
+            {
+                std::cout<<A[i].first[j]<<" -> ";
+            }
+            std::cout<<A[i].second<<'\n';
+        }
+        return;
+    }
+}
+
+
+void Algorithms:: threeShortestPaths (std::string start, std::string finish)
+{
+    std::vector<std::pair<std::vector<std::string>, int> > A= threeShortestPathsHelper(start, finish, loadedGraph.getGraph());
+    printThreeShortestPaths(A);
+    return;
+}
+
+
+void Algorithms:: threeShortestPathsAfterClosing (std::string start, std::string finish)
+{
+    Graph graph = loadedGraph.getGraph();
+    int n;
+    std::vector<std::string> closedCrossroads;
+    std::cout<<"Enter the number of crossroads you want to close: ";
+    do
+    {
+        std::cin>>n;
+        if(n<=0 || n>graph.getMyGraph().size()) 
+        std::cout<<"Please enter a number bigger than zero and no bigger than the number of crossroads!\n";
+    } while (n<=0 || n>graph.getMyGraph().size());
+    std::cout<<"Now enter the names of the crossroads you want to close one by one:\n";
+    for(int i=0; i<n; i++)
+    {
+        std::string currentCrossroad;
+        std::cin>>currentCrossroad;
+        if(graph.existsVertex(currentCrossroad) && currentCrossroad!=start && currentCrossroad!=finish) closedCrossroads.push_back(currentCrossroad);
+        else if (graph.existsVertex(currentCrossroad) && (currentCrossroad==start || currentCrossroad==finish))
+        {
+            std::cout<<"Please remove a crossroad different from the start or finish! Otherwise, the task is pointless!\n";
+            i--;
+        }
+        else 
+        {
+            std::cout<<"There is no vertex called "<<currentCrossroad<<" in the graph!\n";
+            std::cout<<"Please enter a valid name of a vertex!\n";
+            i--;
+        }
+    }
+    for(int i=0; i<closedCrossroads.size(); i++)
+    {
+        graph.removeVertex(closedCrossroads[i]);
+    }
+    std::vector<std::pair<std::vector<std::string>, int> > A=threeShortestPathsHelper(start, finish, graph);
+    printThreeShortestPaths(A);
+    return;
+}
+
+
+Data Algorithms:: getData () const
+{
+    return loadedGraph;
 }
