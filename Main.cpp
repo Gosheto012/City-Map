@@ -1,24 +1,11 @@
-#include"Graph.cpp"
-#include"Data.cpp"
-#include"Algorithms.cpp"
+#include"UserInput.h"
+
 int main ()
 {
-   
- 
-    Algorithms a ("Map.txt"); 
-    a.loadDataFromFile("Map.txt");
-    a.printGraph();
-    a.getData().printGraph();
-    std::cout<<a.isReachable("Mama", "Tati");
-    std::cout<<'\n';
-    std::cout<<a.canReturnToSamePlace("FMI");
-    std::cout<<'\n';
-    std::cout<<a.canReachAllOthers("Centur");
-    std::cout<<'\n';
-    a.printOneWayStreets();
-    std::cout<<'\n';
-    std::cout<<a.samePowerEachEdge();
-    std::cout<<'\n';
-    a.printEulerianPathIfAvailable();
-    return 0;
-}
+  std::string fileName;
+  std::cout<<"Please enter the name of the file in order to load the map: ";
+  std::cin>>fileName;
+  UserInput runner(fileName);
+  runner.run();
+  return 0;
+} 
