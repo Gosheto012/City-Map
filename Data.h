@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __DATA_H
 #define __DATA_H
 
@@ -8,11 +9,11 @@
 
 class Data
 {
+    private:
+
     Graph graph;
 
     public:
-
-
     Data ();
     int numberVertexesInLine (std::string line);
     std::string extractNameGraph(std::string line, int wordNumber);
@@ -21,8 +22,5 @@ class Data
     void printGraph () const;
     Graph getGraph ();
 };
-
-
-
 
 #endif
