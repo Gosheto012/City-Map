@@ -8,19 +8,20 @@ UserInput:: UserInput (std::string file)
 
 void UserInput:: cityMenu () const
 {
-    std::cout << "************************************** WELCOME TO THE CITY! **************************************" << std::endl;
+	std::cout << "************************************** WELCOME TO THE CITY! **************************************" << std::endl;
 	std::cout << "* 0. Take a look at the city map                                                                 *" << std::endl;
 	std::cout << "* 1. Check if exists a path between two crossroads                                               *" << std::endl;
-    std::cout << "* 2. Find three shortest paths between two crossroads                                            *" << std::endl;
+        std::cout << "* 2. Find three shortest paths between two crossroads                                            *" << std::endl;
 	std::cout << "* 3. Find three shortest paths between two crossroads after you give a list of closed crossroads *" << std::endl;
 	std::cout << "* 4. Check if we can return to the same crossroad where we have started from                     *" << std::endl;
-    std::cout << "* 5. Check if we can make a city tour and print the path if we can                               *" << std::endl;
-    std::cout << "* 6. Check if we can reach all other crossroads from a single one                                *" << std::endl;
+    	std::cout << "* 5. Check if we can make a city tour and print the path if we can                               *" << std::endl;
+    	std::cout << "* 6. Check if we can reach all other crossroads from a single one                                *" << std::endl;
 	std::cout << "* 7. Print all one way streets                                                                   *" << std::endl;
 	std::cout << "* 8. Show these instrucions again                                                                *" << std::endl;
-	std::cout<<  "* 9. Exit the program                                                                            *" << std::endl;
+	std::cout << "* 9. Exit the program                                                                            *" << std::endl;
 	std::cout << "**************************************************************************************************" << std::endl;
 }
+
 
 
 void UserInput:: printCity () const
@@ -114,7 +115,6 @@ void UserInput:: canReturnToSamePlace ()
 	}
 	return;
 }
-
 
 
 void UserInput:: cityTour () //5
