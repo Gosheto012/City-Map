@@ -6,7 +6,7 @@ Data:: Data ()
 }
 
 
-int Data:: numberVertexesInLine (std::string line) 
+int Data:: numberVertexesInLine (std::string line)
 {
     int currentWordNumber=0;
     for(int i=0;i<=line.length();i++)
@@ -26,7 +26,7 @@ std::string Data:: extractNameGraph(std::string line, int wordNumber)
     int currentWordNumber=0;
     for(size_t i=0;i<line.length();i++)
     {
-        if(line[i]==' ' || i==line.length()-1) 
+        if(line[i]==' ' || i==line.length()-1)
         {
             if(i==line.length()-1) tempString+=line[i];
             currentWordNumber++;
