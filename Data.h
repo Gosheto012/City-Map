@@ -6,7 +6,6 @@
 #include<sstream>
 #include<fstream>
 
-
 class Data
 {
     private:
