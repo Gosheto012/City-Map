@@ -99,6 +99,18 @@ void Graph:: removeVertex (const std::string& vertexName)
         return;
     }
     myGraph.erase(vertexName);
+    for(auto const& i: myGraph)
+    {
+        for(std::list<std::pair<std::string, int>>::iterator j=myGraph[i.first].begin(); j!=myGraph[i.first].end(); j++)
+        {
+            std::pair<std::string, int> p=*j;
+            if(p.first==vertexName)
+            {
+                myGraph[i.first].erase(j);
+            }
+        }
+    }
+    return;
 }
 
 
