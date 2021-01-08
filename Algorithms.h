@@ -1,3 +1,7 @@
+#pragma once
+#ifndef __ALGORITHMS_H
+#define __ALGORITHMS_H
+
 #include"Data.h"
 #include<cstring>
 #include<queue>
@@ -15,7 +19,7 @@ class Algorithms
     
     void loadData (std::string file);
     bool existsVertex (std::string vertexName);
-    bool isReachable(std::string start, std::string finish);
+    bool isReachable(std::string start, std::string finish, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
     bool canReturnToSamePlace (std::string start);
     bool canReachAllOthers (std::string start);
     bool stringsBelongInArray (std::string str, std::vector<std::string> strArray);
@@ -24,21 +28,19 @@ class Algorithms
 
 
     void traverse (std::string name, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > map, std::unordered_map<std::string, bool>& m);
-    bool isConnected ();
-    bool samePowerEachEdge ();
-    void printEulerianPathIfAvailable ();
+    bool isConnected (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
+    bool samePowerEachEdge (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
+    void printEulerianPathIfAvailable (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map, bool flag, std::string location);
 
-    void Diikstra (std::string start, std:: string finish);
     std::pair<std::vector<std::string>, int> DiikstraReturn (std::string start, std:: string finish, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
     std::vector<std::pair<std::vector<std::string>, int> > threeShortestPathsHelper (std::string start, std::string finish, Graph graph);
     std::pair<std::vector<std::string>, int>  addCostToListandReturnShortest (std::list<std::pair<std::vector<std::string>, int>> B, Graph graph);
     std::list<std::pair<std::string, int>> returnListVertex (std::string vertexName,  std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
-
     void printThreeShortestPaths (std::vector<std::pair<std::vector<std::string>, int> >& A);
     void threeShortestPaths (std::string start, std::string finish);
     void threeShortestPathsAfterClosing (std::string start, std::string finish);
 
     Data getData () const;
 };
-
+ 
 #endif
