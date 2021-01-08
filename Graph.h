@@ -1,3 +1,11 @@
+#pragma once
+#ifndef __GRAPH_H
+#define __GRAPH_H
+
+#include<iostream>
+#include<list>
+#include<vector>
+#include<string>
 #include<unordered_map>
 #include<utility>
 #include<iterator>
