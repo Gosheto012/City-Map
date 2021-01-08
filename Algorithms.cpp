@@ -23,16 +23,9 @@ bool Algorithms:: stringsBelongInArray (std::string str, std::vector<std::string
     return false;
 }
 
-bool Algorithms:: isReachable (std::string start, std::string finish)
+bool Algorithms:: isReachable (std::string start, std::string finish, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map)
 {
-    if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
-    {
-        std::cout<<"There is an invalid name among the written above";
-        std::cout<<'\n';
-        return false;
-    }
     if (start==finish) return true;
-    std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::queue<std::string> q;
     std::unordered_map<std::string,  bool> visited;
     q.push(start);
@@ -131,6 +124,7 @@ void Algorithms:: printOneWayStreets ()
 {
     std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::cout<<"All one-way streets are:\n";
+    bool flag=false;
     for(auto const& i: map)
     {
         std::string Node = i.first;
@@ -140,16 +134,17 @@ void Algorithms:: printOneWayStreets ()
             if(isNoWayCrossroad(j.first))
             {
                 std::cout<<Node<<" - "<<j.first<<'\n';
+                flag=true;
             }
         }
     }
+    if(!flag) std::cout<<"There are not any one-way streets!\n";
 }
 
 
 
-  bool Algorithms:: samePowerEachEdge ()
+bool Algorithms:: samePowerEachEdge (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map)
 {
-    std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string, std::pair<int, int>> result;
     for(auto const& i: map)
     {
@@ -181,9 +176,8 @@ void Algorithms:: traverse (std::string name, std:: unordered_map< std::string, 
 }
 
 
-bool Algorithms:: isConnected ()
+bool Algorithms:: isConnected (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map)
 {
-    std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string, bool> m;
     for (auto const& i: map)
     {
@@ -206,15 +200,14 @@ bool Algorithms:: isConnected ()
 }
 
 
-void Algorithms:: printEulerianPathIfAvailable ()
+void Algorithms:: printEulerianPathIfAvailable (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map, bool flag, std::string location)
 {
-    if(!samePowerEachEdge() || !isConnected())
+    if(!samePowerEachEdge(map) || !isConnected(map))
     {
         std::cout<<"You cannot cross all the streets without repeating\n";
         return;
     }
     std::cout<<"An example of a city tour is the following route:\n";
-    std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
     std::unordered_map<std::string,int> edge_count; 
   
     for (auto const& i: map) 
@@ -225,9 +218,19 @@ void Algorithms:: printEulerianPathIfAvailable ()
     std::stack<std::string> curr_path; 
   
     std::vector<std::string> circuit; 
-   
-    curr_path.push(map.begin()->first); 
-    std::string curr_v = map.begin()->first; 
+    std::string curr_v;
+
+    if (!flag)
+    {
+        curr_path.push(map.begin()->first); 
+        curr_v = map.begin()->first; 
+    }
+    else
+    {
+        curr_path.push(location); 
+        curr_v = location; 
+    }
+    
     while (!curr_path.empty()) 
     { 
         if (edge_count[curr_v]) 
@@ -254,86 +257,17 @@ void Algorithms:: printEulerianPathIfAvailable ()
         std::cout << circuit[i]; 
         if (i) 
            std::cout<<" -> "; 
-    } 
-}
+    }
+    if(circuit.empty()) std::cout<<"You cannot make a city tour";
+    std::cout<<'\n'; 
 
-
-void Algorithms:: Diikstra (std::string start, std:: string finish)
-{
-    if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
-    {
-        std::cout<<"There is an invalid name among the written above";
-        std::cout<<'\n';
-        return ;
-    }
-    std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map =loadedGraph.getGraph().getMyGraph();
-    std::unordered_map<std::string, int> Q;
-    std::map<std::string, std::string> previous;
-    for(auto const& i: map)
-    {
-        Q.insert(std::make_pair(i.first, INF));
-    }
-    Q[start]=0; 
-    std::string currentVertex;
-    std::list<std::string> finalNodeSequence;
-    while (!Q.empty())
-    {
-        int min=INF;
-        for(auto const& i: Q)
-        {
-            if(i.second<=min)
-            {
-                min=i.second;
-                currentVertex=i.first;
-            }
-        }
-        int distance = Q[currentVertex];
-        Q.erase(currentVertex);
-        if(currentVertex==finish)
-        {
-            if(distance!=INF)
-            {
-                std::string elementToAdd=finish;
-                while(elementToAdd!="")
-                {
-                    finalNodeSequence.push_front(elementToAdd);
-                    elementToAdd=previous[elementToAdd];
-                }
-                for(std::list<std::string>::iterator i=finalNodeSequence.begin(); i != finalNodeSequence.end(); ++i)
-                {
-                    std::cout<<*i<<" -> "; 
-                }
-                std::cout<<distance<<'\n';
-                return;
-            }
-        }
-        for (auto const& i: map[currentVertex])
-        {
-            if (Q.find(i.first)!=Q.end())
-            {
-                int possibleNewDistance= distance+ i.second;
-                if (possibleNewDistance<Q[i.first])
-                {   
-                    Q[i.first]=possibleNewDistance;
-                    previous[i.first]=currentVertex;
-                    if(currentVertex==start) previous[currentVertex]="";
-                }
-            }  
-        }
-    }
-    std::cout<<"You cannot reach crossroad 2 from crossroad 1\n";
 }
 
 
 std::pair<std::vector<std::string>, int> Algorithms:: DiikstraReturn (std::string start, std:: string finish, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map)
 {
     std::pair<std::vector<std::string>, int> result;
-    if (!loadedGraph.getGraph().existsVertex(start) || !loadedGraph.getGraph().existsVertex(finish))
-    {
-        std::cout<<"There is an invalid name among the written above";
-        std::cout<<'\n';
-        return result ;
-    }
+    if(!isReachable(start, finish, map)) return result;
     std::unordered_map<std::string, int> Q;
     std::map<std::string, std::string> previous;
     for(auto const& i: map)
@@ -421,9 +355,9 @@ std::vector<std::pair<std::vector<std::string>, int> > Algorithms:: threeShortes
 {
     std::vector<std::pair<std::vector<std::string>, int> > A;
     std::list<std::pair<std::vector<std::string>, int>> B;
+    if (!isReachable(start, finish, graph.getMyGraph())) return A;
     A.push_back(DiikstraReturn(start, finish, graph.getMyGraph()));
     bool flag=false;
-    bool flag2=true;
     for(int k=1; k<=2; k++)
     {
         flag=false;
@@ -455,43 +389,47 @@ std::vector<std::pair<std::vector<std::string>, int> > Algorithms:: threeShortes
                     if(graph.existsVertex(vertex1) && graph.existsVertex(vertex2))graph.removeEdge(vertex1, vertex2);
                 }
             }
- 
-            
+
             for (int s=0; s<rootPath.size(); s++)
             {
+                //std::cout<<rootPath[s]<<", ";
                 if(rootPath[s]!=spurNode)
                 {
                     vertexSave.insert(std::make_pair(rootPath[s], returnListVertex(rootPath[s], graph.getMyGraph())));
                     if(graph.existsVertex(rootPath[s]))graph.removeVertex(rootPath[s]);
                 } 
             }
-            std::vector<std::string> spurPath =DiikstraReturn(spurNode, finish, graph.getMyGraph()).first;
-            std::vector<std::string> totalPath;
-            for(int s=0; s<rootPath.size(); s++)
+
+            if(DiikstraReturn(spurNode, finish, graph.getMyGraph()).second>0 && DiikstraReturn(spurNode, finish, graph.getMyGraph()).second<INF)
             {
-                totalPath.push_back(rootPath[s]);
-            }
-            for(int s=1; s<spurPath.size(); s++)
-            {
-                totalPath.push_back(spurPath[s]);
-            }
-            bool destinationFlag=false;
-            if(totalPath[totalPath.size()-1]!=finish) destinationFlag=true;
-            for(std::list<std::pair<std::vector<std::string>, int>>::iterator it=B.begin(); it!=B.end(); it++)
-            {
-                std::pair<std::vector<std::string>, int> myPair=*it;
-                if(totalPath==myPair.first)
+                std::vector<std::string> spurPath =DiikstraReturn(spurNode, finish, graph.getMyGraph()).first;
+                bool destinationFlag=false;
+                std::vector<std::string> totalPath;
+                for(int s=0; s<rootPath.size(); s++)
                 {
+                    totalPath.push_back(rootPath[s]);
+                }
+                for(int s=1; s<spurPath.size(); s++)
+                {
+                    totalPath.push_back(spurPath[s]);
+                }
+                if(totalPath[totalPath.size()-1]!=finish) destinationFlag=true;
+                for(std::list<std::pair<std::vector<std::string>, int>>::iterator it=B.begin(); it!=B.end(); it++)
+                {
+                    std::pair<std::vector<std::string>, int> myPair=*it;
+                    if(totalPath==myPair.first)
+                    {
+                        flag=true;
+                        break;
+                    } 
+                }
+                if(!flag && !destinationFlag)
+                {
+                    B.push_back(std::make_pair(totalPath, 0));
+                }
 
-                    flag=true;
-                    break;
-                } 
             }
-            if(!flag && !destinationFlag)
-            {
-                B.push_back(std::make_pair(totalPath, 0));
-            }
-
+            
             for(auto const& q: newEdgesSave)
             {
                 graph.addEdge(q.first, q.second.first, q.second.second);
@@ -526,7 +464,7 @@ void Algorithms:: printThreeShortestPaths (std::vector<std::pair<std::vector<std
 {
     if(A.size()==0)
     {
-        std::cout<<"There is no path betweeen these crossroads";
+        std::cout<<"There is no path betweeen these crossroads!\n";
         return;
     }
     else if(A.size()==1)
