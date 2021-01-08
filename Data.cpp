@@ -86,6 +86,7 @@ void Data:: printGraph () const
     graph.print();
 }
 
+
 Graph Data:: getGraph ()
 {
     return graph;
