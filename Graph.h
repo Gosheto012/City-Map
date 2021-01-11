@@ -20,18 +20,17 @@ class Graph
 
     Graph ();
     Graph (const Graph& other);
-    Graph (std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > otherMap, int otherVertices, int otherEdges);
     Graph& operator= (const Graph& other);
 
     void print () const;
     bool pathAdjuscent (const std::string& firstVertex, const std::string& secondVertex);
-    bool existsVertex (const std::string vertexName);
+    bool existsVertex (const std::string& vertexName);
     void addEdge (const std::string& firstVertex, const std::string& secondVertex, int distance);
     void addVertex (std::string newName, std::list<std:: pair<std::string, int>>);
     void removeEdge (const std::string& firstVertex, const std::string& secondVertex);
     void removeVertex (const std::string& vertexName);
     int getDistanceConnectedNodes (const std::string& firstVertex, const std::string& secondVertex);
-    std::unordered_map<std::string, std:: list<std:: pair<std::string, int>>> getMyGraph();
+    std::unordered_map<std::string, std:: list<std:: pair<std::string, int>>> getMyGraph() const;
 
 };
 
