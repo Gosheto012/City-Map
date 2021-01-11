@@ -12,9 +12,8 @@ class UserInput
     Algorithms map;
 	std::string location;
 	std::list<std::string> closedCrossroads;
-	std::unordered_map<std::string, std::list<std::pair<std::string, int>>> vertexSave;
 
-
+	//main mode
     void cityMenu () const;
 	void printCity () const;
 	void isReachable ();
@@ -25,6 +24,7 @@ class UserInput
 	void canReachAllOthers ();
 	void oneWayStreets ();
 
+	//interactive mode
 	void interactiveMenu () const;
 	void startLocation ();
 	void changeLocation ();
