@@ -17,30 +17,38 @@ class Algorithms
 
     public:
     
-    void loadData (std::string file);
-    bool existsVertex (std::string vertexName);
-    bool isReachable(std::string start, std::string finish, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
-    bool canReturnToSamePlace (std::string start);
-    bool canReachAllOthers (std::string start);
-    bool stringsBelongInArray (std::string str, std::vector<std::string> strArray);
-    bool isNoWayCrossroad (std::string start);
+    //tasks 1, 4, 6, 7
+    void loadData (const std::string& file);
+    bool existsVertex (const std::string& vertexName);
+    bool isReachable(const std::string& start, const std::string& finish, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map); 
+    bool canReturnToSamePlace (const std::string& start);
+    bool canReachAllOthers (const std::string& start); 
+    bool isNoWayCrossroad (const std::string& start);
     void printOneWayStreets ();
 
-
-    void traverse (std::string name, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > map, std::unordered_map<std::string, bool>& m);
+    //task 5
+    void traverse (std::string name, std:: unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map, std::unordered_map<std::string, bool>& m);
     bool isConnected (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
-    bool samePowerEachEdge (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
-    void printEulerianPathIfAvailable (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map, bool flag, std::string location);
+    bool isEmptyCrossroad (const std::string& vertexName,  std::unordered_map<std::string, std:: list<std:: pair<std::string, int>>> map);
+    bool allEmptyCrossroads (std::unordered_map<std::string, std:: list<std:: pair<std::string, int>>> map);
+    void removeAllEmptyCrossroads (std::unordered_map<std::string, std:: list<std:: pair<std::string, int>>>& map);
+    bool samePowerEachEdge (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map); //5
+    void printEulerianPathIfAvailable (std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map, bool flag, std::string location); //5 Hierholzer's algorithm 
+                                                                                                            //flag && location for the interactive mode
 
-    std::pair<std::vector<std::string>, int> DiikstraReturn (std::string start, std:: string finish, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
-    std::vector<std::pair<std::vector<std::string>, int> > threeShortestPathsHelper (std::string start, std::string finish, Graph graph);
+    //tasks 2, 3
+    std::pair<std::vector<std::string>, int> DiikstraReturn (const std::string& start, const std:: string& finish, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
+    std::vector<std::pair<std::vector<std::string>, int>> threeShortestPathsHelper (const std::string& start, const std::string& finish, Graph graph);
     std::pair<std::vector<std::string>, int>  addCostToListandReturnShortest (std::list<std::pair<std::vector<std::string>, int>> B, Graph graph);
-    std::list<std::pair<std::string, int>> returnListVertex (std::string vertexName,  std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
+    std::list<std::pair<std::string, int>> returnListVertex (const std::string& vertexName,  std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map);
+
+    void addTransitionalEdge (std::list<std::pair<std::string, std::pair<std::string, int>>>& edgesSave, std::unordered_map< std::string, std:: list<std:: pair<std::string, int>>> map, std::string& name );
+
     void printThreeShortestPaths (std::vector<std::pair<std::vector<std::string>, int> >& A);
-    void threeShortestPaths (std::string start, std::string finish);
-    void threeShortestPathsAfterClosing (std::string start, std::string finish);
+    void threeShortestPaths (const std::string& start, const std::string& finish);
+    void threeShortestPathsAfterClosing (const std::string& start, const std::string& finish);
 
     Data getData () const;
 };
- 
+
 #endif
