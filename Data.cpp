@@ -6,7 +6,7 @@ Data:: Data ()
 }
 
 
-int Data:: numberVertexesInLine (std::string line)
+int Data:: numberVertexesInLine (std::string& line)
 {
     int currentWordNumber=0;
     for(int i=0;i<=line.length();i++)
@@ -20,7 +20,7 @@ int Data:: numberVertexesInLine (std::string line)
 }
 
 
-std::string Data:: extractNameGraph(std::string line, int wordNumber) 
+std::string Data:: extractNameGraph(const std::string& line, int wordNumber) 
 {
     std::string tempString;
     int currentWordNumber=0;
@@ -45,7 +45,7 @@ std::string Data:: extractNameGraph(std::string line, int wordNumber)
 }
 
 
-std::list<std::pair<std::string, int>> Data:: makeListFromLine (std::string line)
+std::list<std::pair<std::string, int>> Data:: makeListFromLine (std::string& line)
 {
     std::list<std::pair<std::string, int>> result;
     int counter=1;
@@ -87,7 +87,7 @@ void Data:: printGraph () const
 }
 
 
-Graph Data:: getGraph ()
+Graph Data:: getGraph () const
 {
     return graph;
 }
