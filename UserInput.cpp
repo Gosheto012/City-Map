@@ -7,14 +7,14 @@ UserInput:: UserInput (std::string file)
 
 void UserInput:: cityMenu () const
 {
-    	std::cout << "************************************** WELCOME TO THE CITY! **************************************" << std::endl;
+    std::cout << "************************************** WELCOME TO THE CITY! **************************************" << std::endl;
 	std::cout << "* 0. Take a look at the city map                                                                 *" << std::endl;
 	std::cout << "* 1. Check if exists a path between two crossroads                                               *" << std::endl;
-    	std::cout << "* 2. Find three shortest paths between two crossroads                                            *" << std::endl;
+    std::cout << "* 2. Find three shortest paths between two crossroads                                            *" << std::endl;
 	std::cout << "* 3. Find three shortest paths between two crossroads after you give a list of closed crossroads *" << std::endl;
 	std::cout << "* 4. Check if we can return to the same crossroad where we have started from                     *" << std::endl;
-   	 std::cout << "* 5. Check if we can make a city tour and print the path if we can                               *" << std::endl;
-    	std::cout << "* 6. Check if we can reach all other crossroads from a single one                                *" << std::endl;
+    std::cout << "* 5. Check if we can make a city tour and print the path if we can                               *" << std::endl;
+    std::cout << "* 6. Check if we can reach all other crossroads from a single one                                *" << std::endl;
 	std::cout << "* 7. Print all one way streets                                                                   *" << std::endl;
 	std::cout << "* 8. Show these instrucions again                                                                *" << std::endl;
 	std::cout<<  "* 9. Enter the interactive mode                                                                  *" << std::endl;
@@ -25,14 +25,14 @@ void UserInput:: cityMenu () const
 
 void UserInput:: interactiveMenu () const
 {
-    	std::cout << "********************************************** INTERACTIVE MODE **********************************************" << std::endl;
+    std::cout << "********************************************** INTERACTIVE MODE **********************************************" << std::endl;
 	std::cout << "* 0. Take a look at the city map                                                                             *" << std::endl;
 	std::cout << "* 1. LOCATION: Show your location                                                                            *" << std::endl;
-    	std::cout << "* 2. CHANGE @CROSSROAD: Change your location to a crossroad you write                                        *" << std::endl;
+    std::cout << "* 2. CHANGE @CROSSROAD: Change your location to a crossroad you write                                        *" << std::endl;
 	std::cout << "* 3. NEIGHBOURS: Show all the neighboring crossroad from your location                                       *" << std::endl;
 	std::cout << "* 4. MOVE @CROSSROAD: Change your location to a crossroad you write if possible and print the route to there *" << std::endl;
-    	std::cout << "* 5. CLOSE @CROSSROAD: Close a crossroad                                                                     *" << std::endl;
-    	std::cout << "* 6. OPEN @CROSSROAD: Open a crossroad                                                                       *" << std::endl;
+    std::cout << "* 5. CLOSE @CROSSROAD: Close a crossroad                                                                     *" << std::endl;
+    std::cout << "* 6. OPEN @CROSSROAD: Open a crossroad                                                                       *" << std::endl;
 	std::cout << "* 7. CLOSED: Show all closed crossroads                                                                      *" << std::endl;
 	std::cout << "* 8. TOUR: Print the path of the city tour from your location                                                *" << std::endl;
 	std::cout<<  "* 9. Show these instructions again                                                                           *" << std::endl;
@@ -234,7 +234,8 @@ void UserInput:: printNeighbours ()
 			for(std::list<std::pair<std::string, int>>::iterator j=currentGraph[i.first].begin(); j!=currentGraph[i.first].end(); j++)
 			{
 				std::pair<std::string, int> p=*j;
-				std::cout<<p.first<<", ";
+				std::cout<<p.first;
+				if(*j!=currentGraph[i.first].back()) std::cout<<", ";
 			}
 		}
 	}
@@ -265,6 +266,7 @@ void UserInput:: move()
 	for(int i=0; i<path.size(); i++)
 	{
 		if(i!=path.size()-1) std::cout<<path[i]<<" -> ";
+		if(i==path.size()-1) std::cout<<path[i];
 	}
 	std::cout<<'\n';
 	location=vertexName;
