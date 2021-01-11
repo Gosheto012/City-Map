@@ -6,6 +6,7 @@
 #include<sstream>
 #include<fstream>
 
+
 class Data
 {
     private:
@@ -14,12 +15,12 @@ class Data
 
     public:
     Data ();
-    int numberVertexesInLine (std::string line);
-    std::string extractNameGraph(std::string line, int wordNumber);
-    std::list<std::pair<std::string, int>> makeListFromLine (std::string line);
-    void loadDataFromFile (const char *fileName);
+    int numberVertexesInLine (std::string& line);
+    std::string extractNameGraph(const std::string& line, int wordNumber);
+    std::list<std::pair<std::string, int>> makeListFromLine (std::string& line);
+    void loadDataFromFile (const char* fileName);
     void printGraph () const;
-    Graph getGraph ();
+    Graph getGraph () const;
 };
 
 #endif
