@@ -12,12 +12,6 @@ Graph:: Graph (const Graph& other)
 }
 
 
-Graph::  Graph (std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > otherMap, int otherVertices, int otherEdges)
-{
-    myGraph=otherMap;
-}
-
-
 Graph& Graph:: operator= (const Graph& other)
 {
     if(this!=&other)
@@ -28,11 +22,11 @@ Graph& Graph:: operator= (const Graph& other)
 }
 
 
-bool Graph:: existsVertex (const std::string vertexName)
+bool Graph:: existsVertex (const std::string& vertexName)
 {
     if(myGraph.find(vertexName)!=myGraph.end()) return true;
     else return false;
-} 
+}
 
 
 bool Graph:: pathAdjuscent (const std::string& firstVertex, const std::string& secondVertex)
@@ -145,7 +139,7 @@ int Graph:: getDistanceConnectedNodes (const std::string& firstVertex, const std
 }
 
 
-std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > Graph:: getMyGraph()
+std:: unordered_map< std::string, std:: list<std:: pair<std::string, int> > > Graph:: getMyGraph() const
 {
     return myGraph;
 }
